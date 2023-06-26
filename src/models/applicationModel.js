@@ -10,6 +10,10 @@ export default class ApplicationModel {
   static find(id) {
     return Api.find(this.modelName, id)
   }
+
+  static search(params) {
+    return Api.search(this.modelName, params)
+  }
   
   static get modelName() {
     return new this().modelName

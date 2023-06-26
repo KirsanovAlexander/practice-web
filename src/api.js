@@ -7,4 +7,31 @@ export class Api {
       setTimeout(() => resolve(result), 800)
     })
   }
+
+  static search(modelName, _params) {
+    const emptyParams = {
+      term: '',
+      regNumber: '',
+      preorderTypeId: null,
+      configurationId: null,
+      environmentId: null,
+      datacenterIds: [],
+      statuses: [],
+      page: 1,
+      perPage: 10
+    }
+
+    return new Promise(resolve => {
+      const params = {...emptyParams, ..._params}
+      const results = Data[modelName]
+        .filter(item => !params.term || item.code.toLowerCase().includes(params.term.toLowerCase()) || item.title.toLowerCase().includes(params.term.toLowerCase()))
+        .filter(item => !params.regNumber || item.regNumber.toLowerCase().includes(params.regNumber.toLowerCase()))
+        .filter(item => !params.preorderTypeId || item.preorderTypeId === params.preorderTypeId)
+        .filter(item => !params.configurationId || item.configurationId === params.configurationId)
+        .filter(item => !params.environmentId || item.environmentId === params.environmentId)
+        .filter(item => !params.datacenterIds || !params.datacenterIds.length || item.datacenterIds.some(_id => params.datacenterIds.includes(_id)))
+        .filter(item => !params.statuses || !params.statuses.length || params.statuses.includes(item.status))
+      setTimeout(() => resolve(results), 800)
+    })
+  }
 }

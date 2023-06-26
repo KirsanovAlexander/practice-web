@@ -4,6 +4,8 @@ import {Preorder} from './models'
 function App() {
   useEffect(() => {
     Preorder.find(21).then(result => console.log(result))
+  
+    Preorder.search({preorderTypeId: 1}).then(results => console.log(results))
   }, [])
 
   return <p>Hello!</p>
