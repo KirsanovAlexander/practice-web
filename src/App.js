@@ -3,8 +3,7 @@ import {Preorder} from './models'
 
 function App() {
   useEffect(() => {
-    const item = Preorder.find(21)
-    console.log(item)
+    Preorder.find(21).then(result => console.log(result))
   }, [])
 
   return <p>Hello!</p>
