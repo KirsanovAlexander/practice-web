@@ -31,7 +31,18 @@ export class Api {
         .filter(item => !params.environmentId || item.environmentId === params.environmentId)
         .filter(item => !params.datacenterIds || !params.datacenterIds.length || item.datacenterIds.some(_id => params.datacenterIds.includes(_id)))
         .filter(item => !params.statuses || !params.statuses.length || params.statuses.includes(item.status))
-      setTimeout(() => resolve(results), 800)
+
+      const page = results.slice(params.perPage * (params.page - 1), params.perPage * params.page)
+
+      const result = {
+        currentPage: params.page,
+        pageSize: params.perPage,
+        totalPages: Math.ceil(results.length / params.perPage),
+        count: results.length,
+        results: page
+      }
+      
+      setTimeout(() => resolve(result), 800)
     })
   }
 }
