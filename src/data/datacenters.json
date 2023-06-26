@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "code": "DC1",
+    "title": "MЦОД",
+    "description": "MЦОД"
+  },
+  {
+    "id": 2,
+    "code": "DC2",
+    "title": "MЦОД2",
+    "description": "MЦОД2"
+  },
+  {
+    "id": 3,
+    "code": "DC3",
+    "title": "MЦОД3",
+    "description": "MЦОД3"
+  },
+  {
+    "id": 4,
+    "code": "DC4",
+    "title": "MЦОД4",
+    "description": "MЦОД4"
+  },
+  {
+    "id": 5,
+    "code": "SK",
+    "title": "Сколково",
+    "description": "Сколково"
+  },
+  {
+    "id": 6,
+    "code": "SH",
+    "title": "ШП",
+    "description": "ШП"
+  },
+  {
+    "id": 7,
+    "code": "DC5",
+    "title": "АЦОД",
+    "description": "АЦОД"
+  },
+  {
+    "id": 8,
+    "code": "DC6",
+    "title": "АЦОД2",
+    "description": "АЦОД2"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "code": "PROD",
+    "title": "Пром",
+    "description": "Промышленная среда"
+  },
+  {
+    "id": 2,
+    "code": "TEST",
+    "title": "Тест",
+    "description": "Тестовая среда"
+  },
+  {
+    "id": 3,
+    "code": "NT",
+    "title": "НТ",
+    "description": "Среда для нагрузочного тестирования"
+  },
+  {
+    "id": 4,
+    "code": "DEV",
+    "title": "Дев",
+    "description": "Среда разработки"
+  }
+]
