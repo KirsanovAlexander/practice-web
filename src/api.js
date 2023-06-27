@@ -16,6 +16,7 @@ export class Api {
       configurationId: null,
       environmentId: null,
       datacenterIds: [],
+      isReplication: null,
       statuses: [],
       page: 1,
       perPage: 10
@@ -30,6 +31,7 @@ export class Api {
         .filter(item => !params.configurationId || item.configurationId === params.configurationId)
         .filter(item => !params.environmentId || item.environmentId === params.environmentId)
         .filter(item => !params.datacenterIds || !params.datacenterIds.length || item.datacenterIds.some(_id => params.datacenterIds.includes(_id)))
+        .filter(item => (!params.isReplication && params.isReplication !== false) || item.isReplication === params.isReplication)
         .filter(item => !params.statuses || !params.statuses.length || params.statuses.includes(item.status))
 
       const page = results.slice(params.perPage * (params.page - 1), params.perPage * params.page)

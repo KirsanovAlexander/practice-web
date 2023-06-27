@@ -6,6 +6,7 @@
     "configurationId": 1,
     "environmentId": 1,
     "datacenterIds": [1, 2],
+    "isReplication": false,
     "status": "NEW"
   },
   {
@@ -15,6 +16,7 @@
     "configurationId": 2,
     "environmentId": 2,
     "datacenterIds": [2, 3],
+    "isReplication": false,
     "status": "APPROVED"
   },
   {
@@ -24,6 +26,7 @@
     "configurationId": 3,
     "environmentId": 3,
     "datacenterIds": [2, 3],
+    "isReplication": false,
     "status": "IN_WORK"
   },
   {
@@ -33,6 +36,7 @@
     "configurationId": 1,
     "environmentId": 1,
     "datacenterIds": [6],
+    "isReplication": false,
     "status": "COMPLETED"
   },
   {
@@ -42,6 +46,7 @@
     "configurationId": 2,
     "environmentId": 2,
     "datacenterIds": [5],
+    "isReplication": false,
     "status": "СANCELED"
   },
   {
@@ -51,6 +56,7 @@
     "configurationId": 3,
     "environmentId": 3,
     "datacenterIds": [7, 8],
+    "isReplication": false,
     "status": "NEW"
   },
   {
@@ -60,6 +66,7 @@
     "configurationId": 1,
     "environmentId": 4,
     "datacenterIds": [3, 4],
+    "isReplication": false,
     "status": "APPROVED"
   },
   {
@@ -69,6 +76,7 @@
     "configurationId": 2,
     "environmentId": 1,
     "datacenterIds": [2,4],
+    "isReplication": false,
     "status": "IN_WORK"
   },
   {
@@ -78,6 +86,7 @@
     "configurationId": null,
     "environmentId": 1,
     "datacenterIds": [2, 3],
+    "isReplication": true,
     "status": "NEW"
   },
   {
@@ -87,6 +96,7 @@
     "configurationId": null,
     "environmentId": 2,
     "datacenterIds": [1, 3],
+    "isReplication": false,
     "status": "APPROVED"
   },
   {
@@ -96,6 +106,7 @@
     "configurationId": null,
     "environmentId": 3,
     "datacenterIds": [2, 3],
+    "isReplication": true,
     "status": "IN_WORK"
   },
   {
@@ -105,6 +116,7 @@
     "configurationId": null,
     "environmentId": 1,
     "datacenterIds": [4],
+    "isReplication": false,
     "status": "COMPLETED"
   },
   {
@@ -114,6 +126,7 @@
     "configurationId": null,
     "environmentId": 2,
     "datacenterIds": [5],
+    "isReplication": false,
     "status": "СANCELED"
   },
   {
@@ -123,6 +136,7 @@
     "configurationId": null,
     "environmentId": 3,
     "datacenterIds": [6],
+    "isReplication": false,
     "status": "NEW"
   },
   {
@@ -132,6 +146,7 @@
     "configurationId": null,
     "environmentId": 4,
     "datacenterIds": [3, 4],
+    "isReplication": true,
     "status": "APPROVED"
   },
   {
@@ -141,6 +156,7 @@
     "configurationId": null,
     "environmentId": 1,
     "datacenterIds": [2, 3],
+    "isReplication": false,
     "status": "NEW"
   },
   {
@@ -150,6 +166,7 @@
     "configurationId": null,
     "environmentId": 2,
     "datacenterIds": [1, 3],
+    "isReplication": false,
     "status": "APPROVED"
   },
   {
@@ -159,6 +176,7 @@
     "configurationId": null,
     "environmentId": 3,
     "datacenterIds": [7, 8],
+    "isReplication": false,
     "status": "IN_WORK"
   },
   {
@@ -168,6 +186,7 @@
     "configurationId": null,
     "environmentId": 1,
     "datacenterIds": [4],
+    "isReplication": false,
     "status": "COMPLETED"
   },
   {
@@ -177,6 +196,7 @@
     "configurationId": null,
     "environmentId": 2,
     "datacenterIds": [5],
+    "isReplication": false,
     "status": "СANCELED"
   },
   {
@@ -186,6 +206,7 @@
     "configurationId": null,
     "environmentId": 3,
     "datacenterIds": [8],
+    "isReplication": false,
     "status": "NEW"
   },
   {
@@ -195,6 +216,7 @@
     "configurationId": null,
     "environmentId": 4,
     "datacenterIds": [7],
+    "isReplication": false,
     "status": "APPROVED"
   }
 ]
