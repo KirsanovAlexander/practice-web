@@ -1,15 +1,29 @@
 import * as Data from './data'
 
+export interface SearchParams {
+    term?: string;
+    title?: string;
+    regNumber?: string;
+    preorderTypeId?: number | null
+    configurationId?: string | null
+    environmentId?: string | null 
+    datacenterIds?: string[],
+    isReplication?: boolean | null,
+    statuses?: string[],
+    page?: number
+    perPage?: number
+}
+
 export class Api {
-  static find(modelName, id) {
+  static find(modelName: string, id: string) {
     return new Promise(resolve => {
       const result = Data[modelName].find(item => item.id === id)
       setTimeout(() => resolve(result), 800)
     })
   }
 
-  static search(modelName, _params) {
-    const emptyParams = {
+  static search(modelName: string, _params: SearchParams) {
+    const emptyParams: SearchParams = {
       term: '',
       regNumber: '',
       preorderTypeId: null,
