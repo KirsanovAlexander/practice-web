@@ -7,11 +7,14 @@ export interface HeaderProps {
 
 export function Header({ title, actions }: HeaderProps) {
   return (
-    <Box p={2} display="flex" justifyContent="space-between">
+    <Box
+      p={2}
+      display="flex"
+      justifyContent="space-between"
+    >
       <Box>
         {title}
       </Box>
-
       <Box>
         {actions}
       </Box>

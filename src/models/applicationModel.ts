@@ -1,6 +1,7 @@
 import {Api} from '../api'
 import {SearchParams} from '../api'
 
+
 export default class ApplicationModel {
   modelName = ''
   caption = ''

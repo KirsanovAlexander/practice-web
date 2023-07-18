@@ -16,22 +16,14 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Link, Router } from "react-router-dom";
 import { Configuration, Environment } from "../../models";
-import { Preorders } from "../preorders/preorders";
-import { ViewAgenda } from "@mui/icons-material";
 
-
-
-
-
-// export interface PreorderProps {
-//   children?: React.ReactNode
-// }
 
 export function Preorder({ children }: PreorderProps) {
   const [count, setCount] = useState(0);
   const [data, setData] = useState([]);
   const [codesConfigurations, setCodesConfigurations] = useState();
   const [codesEnvironments, setCodesEnvironments] = useState();
+
 
   useEffect(() => {
     async function searchData() {
@@ -77,30 +69,40 @@ export function Preorder({ children }: PreorderProps) {
 
   return (
     <>
-      {/* ссылка на регистрационный номер и логотип */}
-
       <Stack direction="row" spacing={2}>
         <Avatar
           sx={{ bgcolor: deepOrange[500], width: 56, height: 56 }}
-        ></Avatar>
-        <Typography variant="h6" noWrap component="div">
-          <Typography variant="h5" noWrap component="div">
+        >
+        </Avatar>
+        <Typography
+          variant="h6"
+          noWrap component="div"
+        >
+          <Typography
+            variant="h5"
+            noWrap component="div"
+          >
             X86-1
           </Typography>
           Редактирование потребности
         </Typography>
-        <Button variant="contained" color="success" size="small">
+        <Button
+          variant="contained"
+          color="success"
+          size="small"
+        >
           Success
         </Button>
       </Stack>
-      <Select>
-        
-      </Select>
+      <Select></Select>
       <Box display="flex">
-        <Box flexBasis="200px" mr="2" mt="50px">
+        <Box
+          flexBasis="200px"
+          mr="2"
+          mt="50px"
+        >
           <FormControl fullWidth>
             <InputLabel id="configurations">Конфигурация:</InputLabel>
-
             <Select
               labelId="configurations"
               label="Конфигурация:"
@@ -119,10 +121,13 @@ export function Preorder({ children }: PreorderProps) {
             </Select>
           </FormControl>
         </Box>
-        <Box flexBasis="200px" ml="50px" mt="50px">
+        <Box
+          flexBasis="200px"
+          ml="50px"
+          mt="50px"
+        >
           <FormControl fullWidth>
             <InputLabel id="environments">Среда:</InputLabel>
-
             <Select
               labelId="environments"
               label="Среда:"
@@ -142,6 +147,15 @@ export function Preorder({ children }: PreorderProps) {
           </FormControl>
         </Box>
       </Box>
+      <Box mt="30px">
+        <TextField
+          fullWidth
+          id="outlined-multiline-flexible"
+          label="Описание"
+          multiline
+          maxRows={4}
+        />
+      </Box>
       <Button
         onClick={() => {
           alert("Изменения сохранены");
@@ -149,12 +163,10 @@ export function Preorder({ children }: PreorderProps) {
       >
         Сохранить
       </Button>
-      <Button onClick={() => {}}>Закрыть</Button>
-      <Button
-        onClick={() => {
-          alert("Элемент удален/Вы точно хотите удалить элемент?");
-        }}
-      >
+      <Link to='/preorders'>Закрыть</Link>
+      <Button onClick={() => {
+        alert("Элемент удален/Вы точно хотите удалить элемент?");
+      }}>
         Удалить
       </Button>
     </>

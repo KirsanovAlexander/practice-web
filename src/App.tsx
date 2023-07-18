@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react'
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider} from "react-router-dom";
 import { Preorder as PreorderModel } from './models'
 import { Page } from './components'
 import { Preorders, Preorder, Configurations, Environments, Datacenters, PreorderTypes} from './pages'
+
 
 
 const router = createBrowserRouter([
