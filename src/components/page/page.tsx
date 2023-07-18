@@ -20,6 +20,7 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 
+
 const DRAWER_WIDTH = 240;
 
 const MENU_ITEMS = [
@@ -64,7 +65,10 @@ export function Page({ children }: PageProps) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar
+        position="fixed"
+        open={open}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -75,7 +79,11 @@ export function Page({ children }: PageProps) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+          >
             АС Практика
           </Typography>
         </Toolbar>
@@ -100,15 +108,18 @@ export function Page({ children }: PageProps) {
         </DrawerHeader>
         <Divider />
         <List>
-          {MENU_ITEMS.map(({path, title}, index) => (
-            <ListItem key={path} disablePadding>
+          {MENU_ITEMS.map(({ path, title }, index) => (
+            <ListItem
+              key={path}
+              disablePadding
+            >
               <Link to={path}>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={title} />
-              </ListItemButton>
+                <ListItemButton>
+                  <ListItemIcon>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={title} />
+                </ListItemButton>
               </Link>
             </ListItem>
           ))}

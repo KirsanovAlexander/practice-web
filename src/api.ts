@@ -4,6 +4,7 @@ export interface SearchParams {
     term?: string;
     title?: string;
     regNumber?: string;
+    code?:string;
     preorderTypeId?: number | null
     configurationId?: string | null
     environmentId?: string | null 
@@ -26,6 +27,7 @@ export class Api {
     const emptyParams: SearchParams = {
       term: '',
       regNumber: '',
+      code:'',
       preorderTypeId: null,
       configurationId: null,
       environmentId: null,

@@ -1,0 +1,33 @@
+module.exports = {
+      'react/prop-types': 'off',
+      'react/no-children-prop': 'off',
+      'react/react-in-jsx-scope': 'off',
+      'jest/no-conditional-expect': 'off',
+      'react/display-name': ['error'],
+      'react/jsx-indent-props': ['error', 2],
+      'react/jsx-curly-brace-presence': ['error', {props: 'never', children: 'never'}],
+      'react/no-unknown-property': ['error', {ignore: ['qa-testid']}],
+      'react/jsx-wrap-multilines': ['error', {
+        'declaration': 'ignore',
+        'assignment': 'ignore',
+        'return': 'parens',
+        'arrow': 'ignore',
+        'condition': 'ignore',
+        'logical': 'ignore',
+        'prop': 'ignore'
+      }],
+      'react/jsx-curly-newline': ['error', {multiline: 'consistent', singleline: 'consistent'}],
+      'react-hooks/rules-of-hooks': 'warn',
+      'react-hooks/exhaustive-deps': 'warn',
+      '@emotion/pkg-renaming': 2,
+      '@emotion/jsx-import': 1,
+      '@emotion/no-vanilla': 1,
+      '@emotion/import-from-emotion': 1,
+      '@emotion/styled-import': 1,
+      'testing-library/no-unnecessary-act': 'off',
+      'testing-library/prefer-screen-queries': 'off',
+      'testing-library/no-node-access': 'off',
+      'testing-library/prefer-presence-queries': ['off'],
+      'testing-library/no-wait-for-side-effects': ['off'],
+      'unused-imports/no-unused-imports': 'error'
+}
