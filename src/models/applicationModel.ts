@@ -1,4 +1,6 @@
 import {Api} from '../api'
+import {SearchParams} from '../api'
+
 
 export default class ApplicationModel {
   modelName = ''
@@ -7,11 +9,11 @@ export default class ApplicationModel {
   description = ''
   icon = ''
   
-  static find(id) {
+  static find(id: string) {
     return Api.find(this.modelName, id)
   }
 
-  static search(params) {
+  static search(params?: SearchParams) {
     return Api.search(this.modelName, params)
   }
   
