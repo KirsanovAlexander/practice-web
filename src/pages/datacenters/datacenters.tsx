@@ -3,54 +3,52 @@ import {
   FormControl,
   TextField,
   Typography,
-} from "@mui/material";
-import { Datacenter } from "../../models";
-import { useEffect, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { Link } from "react-router-dom";
+} from '@mui/material'
+import {Datacenter} from '../../models'
+import {useEffect, useState} from 'react'
+import {DataGrid} from '@mui/x-data-grid'
+import {Link} from 'react-router-dom'
 
 
 const COLUMNS = [
   {
-    headerName: "ID",
-    field: "id",
+    headerName: 'ID',
+    field: 'id',
     width: 100,
   },
   {
-    headerName: "Title",
-    field: "title",
+    headerName: 'Title',
+    field: 'title',
     width: 300,
   },
   {
-    headerName: "Code",
-    field: "code",
+    headerName: 'Code',
+    field: 'code',
     width: 600,
     renderCell: (params) => (
       <Link to={`/data-centers/${params.row.id}`}>{params.value}</Link>
     ),
   },
-];
+]
 
-export function Datacenters() {
-  const [count, setCount] = useState(0);
-  const [data, setData] = useState([]);
+export function Datacenters () {
+  const [count, setCount] = useState(0)
+  const [data, setData] = useState([])
 
 
   useEffect(() => {
-    async function searchData() {
+    async function searchData () {
       try {
-        const results: any = await Datacenter.search();
+        const results = await Datacenter.search()
 
-        setData(results.results);
-        setCount(results.count);
+        setData(results.results)
+        setCount(results.count)
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     }
-    searchData();
-  }, []);
-
-  console.log(data)
+    searchData()
+  }, [])
 
   return (
     <>
@@ -65,11 +63,12 @@ export function Datacenters() {
           <TextField
             placeholder="Начните ввод номера"
             label="Название"
-            onChange={(text: any) => {
-              Datacenter.search({ code: text.target.value }).then((results) => {
-                setData(results.results);
-                setCount(results.count);
-              });
+            onChange={(text) => {
+              Datacenter.search({term: text.target.value}).then(
+                (results) => {
+                  setData(results.results)
+                  setCount(results.count)
+                })
             }}
           />
         </FormControl>
@@ -80,7 +79,7 @@ export function Datacenters() {
         columns={COLUMNS}
         initialState={{
           pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
+            paginationModel: {page: 0, pageSize: 5},
           },
         }}
         pageSizeOptions={[5, 10]}
@@ -88,5 +87,5 @@ export function Datacenters() {
         disableColumnFilter
       />
     </>
-  );
+  )
 }

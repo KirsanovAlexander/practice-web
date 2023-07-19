@@ -4,54 +4,36 @@ import {
   Box,
   Button,
   FormControl,
-  Input,
   InputLabel,
   MenuItem,
   Select,
   TextField,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import { DataGrid } from "@mui/x-data-grid";
-import { Preorder, Configuration, Environment } from "../../models";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import {
+  Preorder,
+  Configuration,
+  Environment,
+  Datacenter,
+  PreorderType,
+} from "../../models";
 import { Link } from "react-router-dom";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Collapse from "@mui/material/Collapse";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import { Server } from "../../typings";
+import { Datacenters } from './../datacenters/datacenters';
 
-
-const COLUMNS = [
-  {
-    headerName: "ID",
-    field: "id",
-    width: 70,
-  },
-  {
-    headerName: "Рег.номер",
-    field: "regNumber",
-    width: 200,
-    renderCell: (params: { row: { id: any; }; value: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }) => (
-      <Link to={`/preorders/${params.row.id}`}>{params.value}</Link>
-    ),
-  },
-  {
-    headerName: "Статус",
-    field: "status",
-    width: 200,
-    renderCell: (params) => {
-      const text = params.value;
-
-      if (text === "NEW") {
-        return <div className="status new">{text}</div>;
-      } else if (text === "APPROVED") {
-        return <div className="status approved">{text}</div>;
-      } else if (text === "IN_WORK") {
-        return <div className="status inWork">{text}</div>;
-      }
-      if (text === "COMPLETED") {
-        return <div className="status complited">{text}</div>;
-      } else {
-        return <div className="status canceled">{text}</div>;
-      }
-    },
-  },
-];
+interface SelectItem {
+  value: number;
+  label: string;
+}
 
 const STATUSES = [
   {
@@ -82,33 +64,75 @@ const STATUSES = [
 
 export function Preorders() {
   const [count, setCount] = useState(0);
-  const [data, setData] = useState([]);
-  const [codesConfigurations, setCodesConfigurations] = useState();
-  const [codesEnvironments, setCodesEnvironments] = useState();
+  const [data, setData] = useState<Server.Preorder[]>([]);
+  const [codesConfigurations, setCodesConfigurations] = useState<SelectItem[]>(
+    []
+  );
+  const [codesEnvironments, setCodesEnvironments] = useState<SelectItem[]>([]);
+  const [codesDatacenters, setCodesDatacenters] = useState<SelectItem[]>([]);
+  const [codesPreorderTypes, setCodesPreorderTypes] = useState<SelectItem[]>(
+    []
+  );
+  const [configurationId, setConfigurationId] = useState("");
+  const [regNumber, setRegNumber] = useState("");
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
 
   useEffect(() => {
     async function searchData() {
       try {
         const results = await Preorder.search();
+        const configurations = await Configuration.search();
+        const environments = await Environment.search();
 
-        setData(results.results);
-        setCount(results.count);
-      } catch (error) {
+        if (results) {
+          setData(results.results as Server.Preorder[]);
+          setCount(results.count);
+        }
+
+        setCodesConfigurations(
+          (configurations?.results as Server.Configuration[]).map((el) => ({
+            value: el.id,
+            label: el.code,
+          }))
+        );
+
+        setCodesEnvironments(
+          (environments?.results as Server.Environment[]).map((el) => ({
+            value: el.id,
+            label: el.code,
+          }))
+        );
+      } catch (error: Error) {
         console.error(error);
       }
+
+      setCodesDatacenters(
+        (datacenters?.results as)=> ({
+          ["value"]: el.id,
+          ["label"]: el.code,
+        }))
+      );
+      } catch (error: Error){
+        console.error(error);
+      };
+      )
     }
     searchData();
 
-    Configuration.search().then((results) => {
-      setCodesConfigurations(
+    Datacenter.search().then((results) => {
+      setCodesDatacenters(
         Array.prototype.map.call(results.results, (el) => ({
           ["value"]: el.id,
           ["label"]: el.code,
         }))
       );
     });
-    Environment.search().then((results) => {
-      setCodesEnvironments(
+    PreorderType.search().then((results) => {
+      setCodesPreorderTypes(
         Array.prototype.map.call(results.results, (el) => ({
           ["value"]: el.id,
           ["label"]: el.code,
@@ -117,129 +141,272 @@ export function Preorders() {
     });
   }, []);
 
+  const columns: GridColDef<Server.Preorder>[] = [
+    {
+      headerName: "ID",
+      field: "id",
+      width: 70,
+    },
+    {
+      headerName: "Рег.номер",
+      field: "regNumber",
+      width: 200,
+      renderCell: (params) => (
+        <Link to={`/preorders/${params.row.id}`}>{params.value}</Link>
+      ),
+    },
+    {
+      headerName: "configurationId",
+      field: "configurationId",
+      width: 200,
+      renderCell: (params) =>
+        codesConfigurations.find(
+          (codeConfiguration) =>
+            codeConfiguration.value === params.row.configurationId
+        )?.label,
+    },
+    {
+      headerName: "datacenterIds",
+      field: "datacenterIds",
+      width: 200,
+    },
+    {
+      headerName: "preorderTypeId",
+      field: "preorderTypeId",
+      width: 200,
+    },
+    {
+      headerName: "Статус",
+      field: "status",
+      width: 200,
+      renderCell: (params) => {
+        const text = params.value;
+
+        if (text === "NEW") {
+          return <div className="status new">{text}</div>;
+        } else if (text === "APPROVED") {
+          return <div className="status approved">{text}</div>;
+        } else if (text === "IN_WORK") {
+          return <div className="status inWork">{text}</div>;
+        }
+        if (text === "COMPLETED") {
+          return <div className="status complited">{text}</div>;
+        } else {
+          return <div className="status canceled">{text}</div>;
+        }
+      },
+    },
+  ];
+
+  useEffect(() => {
+    async function filter() {
+      const results = await Preorder.search({
+        regNumber,
+        configurationId,
+      });
+
+      setData(results.results);
+      setCount(results.count);
+    }
+
+    filter();
+  }, [regNumber, configurationId]);
+
   return (
     <>
       <Header
         title="Потребности"
         actions={
           <>
-            <Button
-              variant="contained"
-              endIcon={<Add />}
-            >
+            <Button variant="contained" endIcon={<Add />}>
               Создать
             </Button>
           </>
         }
       />
-      <Box display="flex">
-        <Box
-          flexBasis="200px"
-          mr="2"
-        >
-          <FormControl fullWidth>
-            <TextField
-              placeholder="Начните ввод номера"
-              label="Рег. номер:"
-              onChange={(text) => {
-                Preorder.search({ regNumber: text.target.value }).then(
-                  (results) => {
-                    setData(results.results);
-                    setCount(results.count);
-                  }
-                );
-              }}
-            />
-          </FormControl>
-        </Box>
-        <Box
-          flexBasis="200px"
-          mr="2">
-          <FormControl fullWidth>
-            <InputLabel id="configurations">Конфигурация:</InputLabel>
-            <Select
-              labelId="configurations"
-              label="Конфигурация:"
-              onChange={(el) => {
-                Preorder.search({ configurationId: el.target.value }).then((results) => {
-                  setData(results.results);
-                  setCount(results.count);
-                });
-              }}
-            >
-              {(codesConfigurations || []).map(({ value, label }) => (
-                <MenuItem
-                  key={value}
-                  value={value}
-                >
-                  {label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-        <Box flexBasis="200px" mr="2">
-          <FormControl fullWidth>
-            <InputLabel id="environments">Среда:</InputLabel>
-            <Select
-              labelId="environments"
-              label="Среда:"
-              onChange={(el) => {
-                Preorder.search({ environmentId: el.target.value }).then((results) => {
-                  setData(results.results);
-                  setCount(results.count);
-                });
-              }}
-            >
-              {(codesEnvironments || []).map(({ value, label }) => (
-                <MenuItem
-                  key={value}
-                  value={value}
-                >
-                  {label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-        <Box flexBasis="200px" mr="2">
-          <FormControl fullWidth>
-            <InputLabel id="statuses">Статусы:</InputLabel>
-            <Select
-              labelId="statuses"
-              label="Статусы:"
-              onChange={(el) => {
-                Preorder.search({ status: el }).then((results) => {
-                  setData(results.results);
-                  setCount(results.count);
-                });
-              }}
-            >
-              {(STATUSES || []).map(({ value, label }) => (
-                <MenuItem
-                  key={value}
-                  value={value}
-                >
-                  {label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-      </Box>
-      <div className="countData">Найдено: {count}</div>
-      <DataGrid
-        rows={data}
-        columns={COLUMNS}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
+      <List
+        sx={{
+          width: "100%",
+          maxWidth: 1000,
+          bgcolor: "background.paper",
         }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-        disableColumnFilter
-      />
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+      >
+        <ListItemButton onClick={handleClick}>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Filter" />
+          {open ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItemButton sx={{ pl: 4, maxWidth: 700 }}>
+              <Box display="flex">
+                <Box flexBasis="200px" mr="2">
+                  <FormControl fullWidth>
+                    <TextField
+                      className="filter__select"
+                      placeholder="Начните ввод номера"
+                      label="Рег. номер:"
+                      value={regNumber}
+                      onChange={async (el) => {
+                        setRegNumber(el.target.value);
+                      }}
+                    />
+                  </FormControl>
+                </Box>
+                <Box flexBasis="200px" mr="2">
+                  <FormControl fullWidth>
+                    <InputLabel id="configurations">Конфигурация:</InputLabel>
+                    <Select
+                      className="filter__select"
+                      labelId="configurations"
+                      label="Конфигурация:"
+                      value={configurationId}
+                      onChange={(el) => {
+                        setConfigurationId(el.target.value);
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {(codesConfigurations || []).map(({ value, label }) => (
+                        <MenuItem key={value} value={value}>
+                          {label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box flexBasis="200px" mr="2">
+                  <FormControl fullWidth>
+                    <InputLabel id="environments">Среда:</InputLabel>
+                    <Select
+                      className="filter__select"
+                      labelId="environments"
+                      label="Среда:"
+                      onChange={(el) => {
+                        Preorder.search({
+                          environmentId: el.target.value,
+                        }).then((results) => {
+                          setData(results.results);
+                          setCount(results.count);
+                        });
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {(codesEnvironments || []).map(({ value, label }) => (
+                        <MenuItem key={value} value={value}>
+                          {label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box flexBasis="200px" mr="2">
+                  <FormControl fullWidth>
+                    <InputLabel id="statuses">Статусы:</InputLabel>
+                    <Select
+                      className="filter__select"
+                      labelId="statuses"
+                      label="Статусы:"
+                      onChange={(el) => {
+                        Preorder.search({ status: el }).then((results) => {
+                          setData(results.results);
+                          setCount(results.count);
+                        });
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {(STATUSES || []).map(({ value, label }) => (
+                        <MenuItem key={value} value={value}>
+                          {label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box flexBasis="200px" mr="2">
+                  <FormControl fullWidth>
+                    <InputLabel id="environments">Дата-центры:</InputLabel>
+                    <Select
+                      className="filter__select"
+                      labelId="environments"
+                      label="Среда:"
+                      onChange={(el) => {
+                        Preorder.search({
+                          datacenterIds: el.target.value,
+                        }).then((results) => {
+                          setData(results.results);
+                          setCount(results.count);
+                        });
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {(codesDatacenters || []).map(({ value, label }) => (
+                        <MenuItem key={value} value={value}>
+                          {label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box flexBasis="200px" mr="2">
+                  <FormControl fullWidth>
+                    <InputLabel id="environments">Тип потребности:</InputLabel>
+                    <Select
+                      className="filter__select"
+                      labelId="environments"
+                      label="Среда:"
+                      onChange={(el) => {
+                        Preorder.search({
+                          preorderTypeId: el.target.value,
+                        }).then((results) => {
+                          setData(results.results);
+                          setCount(results.count);
+                        });
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {(codesPreorderTypes || []).map(({ value, label }) => (
+                        <MenuItem key={value} value={value}>
+                          {label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
+            </ListItemButton>
+          </List>
+        </Collapse>
+      </List>
+      <>
+        <div className="countData">Найдено: {count}</div>
+        <DataGrid
+          rows={data}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10, 15, 20]}
+          checkboxSelection
+          disableColumnFilter
+        />
+      </>
     </>
   );
 }

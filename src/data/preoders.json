@@ -75,7 +75,7 @@
     "preorderTypeId": 1,
     "configurationId": 2,
     "environmentId": 1,
-    "datacenterIds": [2,4],
+    "datacenterIds": [2, 4],
     "isReplication": false,
     "status": "IN_WORK"
   },

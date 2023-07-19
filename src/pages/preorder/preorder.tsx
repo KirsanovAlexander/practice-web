@@ -14,29 +14,37 @@ import {
 import { deepOrange } from "@mui/material/colors";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Link, Router } from "react-router-dom";
-import { Configuration, Environment } from "../../models";
-
+import { Link, useParams } from "react-router-dom";
+import {
+  Configuration,
+  Environment,
+  Preorder as PreorderModel,
+} from "../../models";
+import { Server } from "../../typings";
 
 export function Preorder({ children }: PreorderProps) {
-  const [count, setCount] = useState(0);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Server.Preorder>();
   const [codesConfigurations, setCodesConfigurations] = useState();
   const [codesEnvironments, setCodesEnvironments] = useState();
-
+  const params = useParams();
+  const [configurationId, setConfigurationId] = useState();
 
   useEffect(() => {
-    async function searchData() {
+    async function getData() {
       try {
-        const results = await Preorder.search();
-
-        setData(results.results);
-        setCount(results.count);
-      } catch (error) {
+        if (params.id) {
+          const result: Server.Preorder = await PreorderModel.get(
+            Number(params.id)
+          );
+          setData(result);
+          setConfigurationId(result.configurationId);
+        }
+      } catch (error: Error) {
         console.error(error);
       }
     }
-    searchData();
+
+    getData();
 
     Configuration.search().then((results) => {
       setCodesConfigurations(
@@ -72,45 +80,27 @@ export function Preorder({ children }: PreorderProps) {
       <Stack direction="row" spacing={2}>
         <Avatar
           sx={{ bgcolor: deepOrange[500], width: 56, height: 56 }}
-        >
-        </Avatar>
-        <Typography
-          variant="h6"
-          noWrap component="div"
-        >
-          <Typography
-            variant="h5"
-            noWrap component="div"
-          >
+        ></Avatar>
+        <Typography variant="h6" noWrap component="div">
+          <Typography variant="h5" noWrap component="div">
             X86-1
           </Typography>
           Редактирование потребности
         </Typography>
-        <Button
-          variant="contained"
-          color="success"
-          size="small"
-        >
+        <Button variant="contained" color="success" size="small">
           Success
         </Button>
       </Stack>
-      <Select></Select>
       <Box display="flex">
-        <Box
-          flexBasis="200px"
-          mr="2"
-          mt="50px"
-        >
+        <Box flexBasis="200px" mr="2" mt="50px">
           <FormControl fullWidth>
             <InputLabel id="configurations">Конфигурация:</InputLabel>
             <Select
               labelId="configurations"
               label="Конфигурация:"
+              value={configurationId}
               onChange={(el) => {
-                Preorder.search({ configurationId: el }).then((results) => {
-                  setData(results.results);
-                  setCount(results.count);
-                });
+                setConfigurationId(el.target.value);
               }}
             >
               {(codesConfigurations || []).map(({ value, label }) => (
@@ -121,18 +111,14 @@ export function Preorder({ children }: PreorderProps) {
             </Select>
           </FormControl>
         </Box>
-        <Box
-          flexBasis="200px"
-          ml="50px"
-          mt="50px"
-        >
+        <Box flexBasis="200px" ml="50px" mt="50px">
           <FormControl fullWidth>
             <InputLabel id="environments">Среда:</InputLabel>
             <Select
               labelId="environments"
               label="Среда:"
               onChange={(el) => {
-                Preorder.search({ environmentId: el }).then((results) => {
+                PreorderModel.search({ environmentId: el }).then((results) => {
                   setData(results.results);
                   setCount(results.count);
                 });
@@ -157,16 +143,30 @@ export function Preorder({ children }: PreorderProps) {
         />
       </Box>
       <Button
-        onClick={() => {
-          alert("Изменения сохранены");
+        onClick={async () => {
+          if (params.id) {
+            alert("Изменения сохранены");
+            await PreorderModel.update(Number(params.id), {
+              ...data,
+              configurationId,
+            } as Server.Preorder);
+          } else {
+            alert("Потребность создана");
+            await PreorderModel.create({
+              ...data,
+              configurationId,
+            } as Server.Preorder);
+          }
         }}
       >
         Сохранить
       </Button>
-      <Link to='/preorders'>Закрыть</Link>
-      <Button onClick={() => {
-        alert("Элемент удален/Вы точно хотите удалить элемент?");
-      }}>
+      <Link to="/preorders">Закрыть</Link>
+      <Button
+        onClick={() => {
+          alert("Элемент удален/Вы точно хотите удалить элемент?");
+        }}
+      >
         Удалить
       </Button>
     </>

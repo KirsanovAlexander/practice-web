@@ -1,11 +1,11 @@
-import { Box } from "@mui/material";
+import {Box} from '@mui/material'
 
 export interface HeaderProps {
   title: string
   actions: React.ReactNode
 }
 
-export function Header({ title, actions }: HeaderProps) {
+export function Header ({title, actions}: HeaderProps) {
   return (
     <Box
       p={2}
@@ -19,5 +19,5 @@ export function Header({ title, actions }: HeaderProps) {
         {actions}
       </Box>
     </Box>
-  );
-};
+  )
+}

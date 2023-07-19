@@ -1,9 +1,9 @@
-import ApplicationModel from './applicationModel'
+import ApplicationModel from "./applicationModel";
 
 export class Preorder extends ApplicationModel {
-  modelName = 'Preorders'
-  indexCaption = 'Потребности'
-  caption = 'Потребность'
-  description = 'Информация о потребностях в оборудовании'
-  icon = 'calendar plus'
+  modelName = "Preorders" as const;
+  indexCaption = "Потребности";
+  caption = "Потребность";
+  description = "Информация о потребностях в оборудовании";
+  icon = "calendar plus";
 }

@@ -11,3 +11,48 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.filter__select{
+  width: 150px;
+}
+.status {
+  color: white;
+  width: 100%;
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+.new {
+  background-color: #b8b8b7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.approved {
+  background-color: #1c77cc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inWork {
+  background-color: #FFBA00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.complited {
+  background-color: #24b317;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.canceled {
+  background-color: #f7472b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
