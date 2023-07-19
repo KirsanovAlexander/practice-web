@@ -39,7 +39,7 @@ export function Datacenters() {
   useEffect(() => {
     async function searchData() {
       try {
-        const results: any = await Datacenter.search();
+        const results = await Datacenter.search();
 
         setData(results.results);
         setCount(results.count);
@@ -49,8 +49,6 @@ export function Datacenters() {
     }
     searchData();
   }, []);
-
-  console.log(data)
 
   return (
     <>
@@ -65,8 +63,9 @@ export function Datacenters() {
           <TextField
             placeholder="Начните ввод номера"
             label="Название"
-            onChange={(text: any) => {
-              Datacenter.search({ code: text.target.value }).then((results) => {
+            onChange={(text) => {
+              Datacenter.search({ term: text.target.value }).then(
+                (results) => {
                 setData(results.results);
                 setCount(results.count);
               });

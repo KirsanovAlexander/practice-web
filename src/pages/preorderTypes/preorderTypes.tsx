@@ -70,7 +70,7 @@ export function PreorderTypes() {
             placeholder="Начните ввод номера"
             label="Название"
             onChange={(text: any) => {
-              PreorderType.search({ title: text.target.value }).then(
+              PreorderType.search({ term: text.target.value }).then(
                 (results) => {
                   setData(results.results);
                   setCount(results.count);

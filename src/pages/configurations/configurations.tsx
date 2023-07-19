@@ -55,14 +55,6 @@ export function Configurations() {
       }
     }
     searchData();
-    Configuration.search().then((results) => {
-      setCodesConfigurations(
-        Array.prototype.map.call(results.results, (el) => ({
-          ["value"]: el.id,
-          ["label"]: el.code,
-        }))
-      );
-    });
   }, []);
 
   return (
@@ -70,25 +62,6 @@ export function Configurations() {
       <Typography variant="h5" noWrap component="div">
         Конфигурации
       </Typography>
-      <Select
-        labelId="configurations"
-        label="Конфигурация:"
-        onChange={(el) => {
-          Configuration.search({ configurationId: el }).then((results) => {
-            setData(results.results);
-            setCount(results.count);
-          });
-        }}
-      >
-        {(codesConfigurations || []).map(({ value, label }) => (
-          <MenuItem
-            key={value}
-            value={value}
-          >
-            {label}
-          </MenuItem>
-        ))}
-      </Select>
       <Box
         flexBasis="200px"
         mr="50"
@@ -98,7 +71,7 @@ export function Configurations() {
             placeholder="Начните ввод номера"
             label="Название"
             onChange={(text: any) => {
-              Configuration.search({ code: text.target.value }).then(
+              Configuration.search({ term: text.target.value }).then(
                 (results) => {
                   setData(results.results);
                   setCount(results.count);

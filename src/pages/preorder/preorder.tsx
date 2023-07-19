@@ -94,7 +94,6 @@ export function Preorder({ children }: PreorderProps) {
           Success
         </Button>
       </Stack>
-      <Select></Select>
       <Box display="flex">
         <Box
           flexBasis="200px"
