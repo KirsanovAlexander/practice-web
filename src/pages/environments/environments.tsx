@@ -3,36 +3,36 @@ import {
   FormControl,
   TextField,
   Typography,
-} from '@mui/material'
-import {Environment} from '../../models'
-import type {JSXElementConstructor, ReactElement, ReactNode, ReactPortal} from 'react'
-import {useEffect, useState} from 'react'
-import {DataGrid} from '@mui/x-data-grid'
-import {Link} from 'react-router-dom'
+} from "@mui/material"
+import {Environment} from "../../models"
+import type {JSXElementConstructor, ReactElement, ReactNode, ReactPortal} from "react"
+import {useEffect, useState} from "react"
+import {DataGrid} from "@mui/x-data-grid"
+import {Link} from "react-router-dom"
 
 
 const COLUMNS = [
   {
-    headerName:'ID',
-    field:'id',
+    headerName:"ID",
+    field:"id",
     width:100,
   },
   {
-    headerName:'Title',
-    field:'title',
+    headerName:"Title",
+    field:"title",
     width:200,
   },
   {
-    headerName: 'Code',
-    field: 'code',
+    headerName: "Code",
+    field: "code",
     width: 200,
     renderCell: (params: {row: {id: any}; value: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined}) => (
       <Link to={`/environments/${params.row.id}`}>{params.value}</Link>
     ),
   },
   {
-    headerName: 'Description',
-    field: 'description',
+    headerName: "Description",
+    field: "description",
     width: 600,
   },
 ]

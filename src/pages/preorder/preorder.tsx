@@ -1,4 +1,4 @@
-import { useTheme } from "@emotion/react";
+import {useTheme} from "@emotion/react";
 import {
   Avatar,
   Box,
@@ -11,26 +11,27 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { deepOrange } from "@mui/material/colors";
+import {deepOrange} from "@mui/material/colors";
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Link, useParams} from "react-router-dom";
 import {
   Configuration,
   Environment,
   Preorder as PreorderModel,
 } from "../../models";
-import { Server } from "../../typings";
+import type {Server} from "../../typings";
 
-export function Preorder({ children }: PreorderProps) {
+export function Preorder ({children}: PreorderProps) {
   const [data, setData] = useState<Server.Preorder>();
   const [codesConfigurations, setCodesConfigurations] = useState();
   const [codesEnvironments, setCodesEnvironments] = useState();
   const params = useParams();
   const [configurationId, setConfigurationId] = useState();
+  const [environmentId, setEnvironmentId] = useState();  
 
   useEffect(() => {
-    async function getData() {
+    async function getData () {
       try {
         if (params.id) {
           const result: Server.Preorder = await PreorderModel.get(
@@ -38,6 +39,7 @@ export function Preorder({ children }: PreorderProps) {
           );
           setData(result);
           setConfigurationId(result.configurationId);
+          setEnvironmentId(result.environmentId);
         }
       } catch (error: Error) {
         console.error(error);
@@ -79,7 +81,7 @@ export function Preorder({ children }: PreorderProps) {
     <>
       <Stack direction="row" spacing={2}>
         <Avatar
-          sx={{ bgcolor: deepOrange[500], width: 56, height: 56 }}
+          sx={{bgcolor: deepOrange[500], width: 56, height: 56}}
         ></Avatar>
         <Typography variant="h6" noWrap component="div">
           <Typography variant="h5" noWrap component="div">
@@ -103,7 +105,7 @@ export function Preorder({ children }: PreorderProps) {
                 setConfigurationId(el.target.value);
               }}
             >
-              {(codesConfigurations || []).map(({ value, label }) => (
+              {(codesConfigurations || []).map(({value, label}) => (
                 <MenuItem key={value} value={value}>
                   {label}
                 </MenuItem>
@@ -118,13 +120,10 @@ export function Preorder({ children }: PreorderProps) {
               labelId="environments"
               label="Среда:"
               onChange={(el) => {
-                PreorderModel.search({ environmentId: el }).then((results) => {
-                  setData(results.results);
-                  setCount(results.count);
-                });
+                setEnvironmentId(el.target.value);
               }}
             >
-              {(codesEnvironments || []).map(({ value, label }) => (
+              {(codesEnvironments || []).map(({value, label}) => (
                 <MenuItem key={value} value={value}>
                   {label}
                 </MenuItem>
@@ -149,12 +148,14 @@ export function Preorder({ children }: PreorderProps) {
             await PreorderModel.update(Number(params.id), {
               ...data,
               configurationId,
+              environmentId,
             } as Server.Preorder);
           } else {
             alert("Потребность создана");
             await PreorderModel.create({
               ...data,
               configurationId,
+              environmentId,
             } as Server.Preorder);
           }
         }}

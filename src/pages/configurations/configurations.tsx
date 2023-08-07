@@ -3,35 +3,35 @@ import {
   FormControl,
   TextField,
   Typography,
-} from '@mui/material'
-import {Configuration} from '../../models'
-import {useEffect, useState} from 'react'
-import {DataGrid} from '@mui/x-data-grid'
-import {Link} from 'react-router-dom'
+} from "@mui/material"
+import {Configuration} from "../../models"
+import {useEffect, useState} from "react"
+import {DataGrid} from "@mui/x-data-grid"
+import {Link} from "react-router-dom"
 
 
 const COLUMNS = [
   {
-    headerName: 'ID',
-    field: 'id',
+    headerName: "ID",
+    field: "id",
     width: 70,
   },
   {
-    headerName: 'Title',
-    field: 'title',
+    headerName: "Title",
+    field: "title",
     width: 300,
   },
   {
-    headerName: 'Code',
-    field: 'code',
+    headerName: "Code",
+    field: "code",
     width: 250,
     renderCell: (params) => (
       <Link to={`/configurations/${params.row.id}`}>{params.value}</Link>
     ),
   },
   {
-    headerName: 'Description',
-    field: 'description',
+    headerName: "Description",
+    field: "description",
     width: 750,
   },
 ]

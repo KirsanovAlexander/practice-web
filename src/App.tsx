@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Preorder as PreorderModel } from "./models";
-import { Page } from "./components";
+import React, {useEffect} from "react";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {Preorder as PreorderModel} from "./models";
+import {Page} from "./components";
 import {
   Preorders,
   Preorder,
@@ -70,13 +70,13 @@ const router = createBrowserRouter([
   },
 ]);
 
-function App() {
+function App () {
   useEffect(() => {
     PreorderModel.find(21).then((result) => {
       console.log(result);
     });
 
-    PreorderModel.search({ preorderTypeId: 1, perPage: 5, page: 2 }).then(
+    PreorderModel.search({preorderTypeId: 1, perPage: 5, page: 2}).then(
       (results) => {
         console.log(results);
       }

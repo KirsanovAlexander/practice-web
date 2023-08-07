@@ -1,4 +1,6 @@
 export module Server {
+import { Datacenter } from './../models/datacenter';
+import { PreorderType } from './../models/preorderType';
   export interface Entity {
     id: number;
   }

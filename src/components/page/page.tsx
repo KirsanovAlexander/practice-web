@@ -1,49 +1,49 @@
-import * as React from 'react'
-import {Link} from 'react-router-dom'
-import {styled, useTheme} from '@mui/material/styles'
-import Box from '@mui/material/Box'
-import Drawer from '@mui/material/Drawer'
-import CssBaseline from '@mui/material/CssBaseline'
-import type {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar'
-import MuiAppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-import List from '@mui/material/List'
-import Typography from '@mui/material/Typography'
-import Divider from '@mui/material/Divider'
-import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/Menu'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import InboxIcon from '@mui/icons-material/MoveToInbox'
-import MailIcon from '@mui/icons-material/Mail'
+import * as React from "react"
+import {Link} from "react-router-dom"
+import {styled, useTheme} from "@mui/material/styles"
+import Box from "@mui/material/Box"
+import Drawer from "@mui/material/Drawer"
+import CssBaseline from "@mui/material/CssBaseline"
+import type {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar"
+import MuiAppBar from "@mui/material/AppBar"
+import Toolbar from "@mui/material/Toolbar"
+import List from "@mui/material/List"
+import Typography from "@mui/material/Typography"
+import Divider from "@mui/material/Divider"
+import IconButton from "@mui/material/IconButton"
+import MenuIcon from "@mui/icons-material/Menu"
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft"
+import ChevronRightIcon from "@mui/icons-material/ChevronRight"
+import ListItem from "@mui/material/ListItem"
+import ListItemButton from "@mui/material/ListItemButton"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import ListItemText from "@mui/material/ListItemText"
+import InboxIcon from "@mui/icons-material/MoveToInbox"
+import MailIcon from "@mui/icons-material/Mail"
 
 
 const DRAWER_WIDTH = 240
 
 const MENU_ITEMS = [
   {
-    path: '/preorders',
-    title: 'Потребности'
+    path: "/preorders",
+    title: "Потребности"
   },
   {
-    path: '/configurations',
-    title: 'Конфигурации'
+    path: "/configurations",
+    title: "Конфигурации"
   },
   {
-    path: '/environments',
-    title: 'Среды'
+    path: "/environments",
+    title: "Среды"
   },
   {
-    path: '/data-centers',
-    title: 'ЦОДы'
+    path: "/data-centers",
+    title: "ЦОДы"
   },
   {
-    path: '/preorderTypes',
-    title: 'Типы потребностей'
+    path: "/preorderTypes",
+    title: "Типы потребностей"
   }
 ]
 
@@ -64,7 +64,7 @@ export function Page ({children}: PageProps) {
   }
 
   return (
-    <Box sx={{display: 'flex'}}>
+    <Box sx={{display: "flex"}}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -76,7 +76,7 @@ export function Page ({children}: PageProps) {
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            sx={{mr: 2, ...open && {display: 'none'}}}
+            sx={{mr: 2, ...open && {display: "none"}}}
           >
             <MenuIcon />
           </IconButton>
@@ -93,9 +93,9 @@ export function Page ({children}: PageProps) {
         sx={{
           width: DRAWER_WIDTH,
           flexShrink: 0,
-          '& .MuiDrawer-paper': {
+          "& .MuiDrawer-paper": {
             width: DRAWER_WIDTH,
-            boxSizing: 'border-box',
+            boxSizing: "border-box",
           },
         }}
         variant="persistent"
@@ -104,7 +104,7 @@ export function Page ({children}: PageProps) {
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
@@ -135,18 +135,18 @@ export function Page ({children}: PageProps) {
 }
 
 
-const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})<{
+const Main = styled("main", {shouldForwardProp: (prop) => prop !== "open"})<{
   open?: boolean
 }>(({theme, open}) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  transition: theme.transitions.create('margin', {
+  transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   marginLeft: `-${DRAWER_WIDTH}px`,
   ...open && {
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -159,27 +159,27 @@ interface AppBarProps extends MuiAppBarProps {
 }
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== "open",
 })<AppBarProps>(({theme, open}) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
+  transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...open && {
     width: `calc(100% - ${DRAWER_WIDTH}px)`,
     marginLeft: `${DRAWER_WIDTH}px`,
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
 }))
 
-const DrawerHeader = styled('div')(({theme}) => ({
-  display: 'flex',
-  alignItems: 'center',
+const DrawerHeader = styled("div")(({theme}) => ({
+  display: "flex",
+  alignItems: "center",
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
+  justifyContent: "flex-end",
 }))

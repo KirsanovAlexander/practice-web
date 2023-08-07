@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Header } from "../../components";
+import React, {useState, useEffect} from "react";
+import {Header} from "../../components";
 import {
   Box,
   Button,
@@ -9,8 +9,9 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import {Add} from "@mui/icons-material";
+import type {GridColDef} from "@mui/x-data-grid";
+import {DataGrid} from "@mui/x-data-grid";
 import {
   Preorder,
   Configuration,
@@ -18,7 +19,7 @@ import {
   Datacenter,
   PreorderType,
 } from "../../models";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -27,8 +28,9 @@ import Collapse from "@mui/material/Collapse";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { Server } from "../../typings";
-import { Datacenters } from './../datacenters/datacenters';
+import type {Server} from "../../typings";
+import debounce from "@mui/material";
+
 
 interface SelectItem {
   value: number;
@@ -62,19 +64,26 @@ const STATUSES = [
   },
 ];
 
-export function Preorders() {
+export function Preorders () {
   const [count, setCount] = useState(0);
-  const [data, setData] = useState<Server.Preorder[]>([]);
-  const [codesConfigurations, setCodesConfigurations] = useState<SelectItem[]>(
+  const [data, setData] = useState<Array<Server.Preorder>>([]);
+  const [codesConfigurations, setCodesConfigurations] = useState<
+  Array<SelectItem>
+  >([]);
+  const [codesEnvironments, setCodesEnvironments] = useState<Array<SelectItem>>(
     []
   );
-  const [codesEnvironments, setCodesEnvironments] = useState<SelectItem[]>([]);
-  const [codesDatacenters, setCodesDatacenters] = useState<SelectItem[]>([]);
-  const [codesPreorderTypes, setCodesPreorderTypes] = useState<SelectItem[]>(
+  const [codesDatacenters, setCodesDatacenters] = useState<Array<SelectItem>>(
     []
   );
+  const [codesPreorderTypes, setCodesPreorderTypes] = useState<
+  Array<SelectItem>
+  >([]);
   const [configurationId, setConfigurationId] = useState("");
   const [regNumber, setRegNumber] = useState("");
+  const [environmentId, setEnvironmentId] = useState("");
+  const [datacenterIds, setDatacenterIds] = useState([]);
+  const [preorderTypeId, setPreorderTypeId] = useState("");
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {
@@ -82,26 +91,42 @@ export function Preorders() {
   };
 
   useEffect(() => {
-    async function searchData() {
+    async function searchData () {
       try {
         const results = await Preorder.search();
         const configurations = await Configuration.search();
         const environments = await Environment.search();
+        const datacenters = await Datacenter.search();
+        const preordertypes = await PreorderType.search();
 
         if (results) {
-          setData(results.results as Server.Preorder[]);
+          setData(results.results as Array<Server.Preorder>);
           setCount(results.count);
         }
 
         setCodesConfigurations(
-          (configurations?.results as Server.Configuration[]).map((el) => ({
+          (configurations?.results as Server.Configuration).map((el) => ({
             value: el.id,
             label: el.code,
           }))
         );
 
         setCodesEnvironments(
-          (environments?.results as Server.Environment[]).map((el) => ({
+          (environments?.results as Server.Environment).map((el) => ({
+            value: el.id,
+            label: el.code,
+          }))
+        );
+
+        setCodesDatacenters(
+          (datacenters?.results as Server.Datacenter).map((el) => ({
+            value: el.id,
+            label: el.code,
+          }))
+        );
+
+        setCodesPreorderTypes(
+          (preordertypes?.results as Server.PreorderType).map((el) => ({
             value: el.id,
             label: el.code,
           }))
@@ -109,39 +134,29 @@ export function Preorders() {
       } catch (error: Error) {
         console.error(error);
       }
-
-      setCodesDatacenters(
-        (datacenters?.results as)=> ({
-          ["value"]: el.id,
-          ["label"]: el.code,
-        }))
-      );
-      } catch (error: Error){
-        console.error(error);
-      };
-      )
     }
+
     searchData();
 
-    Datacenter.search().then((results) => {
-      setCodesDatacenters(
-        Array.prototype.map.call(results.results, (el) => ({
-          ["value"]: el.id,
-          ["label"]: el.code,
-        }))
-      );
-    });
-    PreorderType.search().then((results) => {
-      setCodesPreorderTypes(
-        Array.prototype.map.call(results.results, (el) => ({
-          ["value"]: el.id,
-          ["label"]: el.code,
-        }))
-      );
-    });
+    // Datacenter.search().then((results) => {
+    //   setCodesDatacenters(
+    //     Array.prototype.map.call(results.results, (el) => ({
+    //       ["value"]: el.id,
+    //       ["label"]: el.code,
+    //     }))
+    //   );
+    // });
+    // PreorderType.search().then((results) => {
+    //   setCodesPreorderTypes(
+    //     Array.prototype.map.call(results.results, (el) => ({
+    //       ["value"]: el.id,
+    //       ["label"]: el.code,
+    //     }))
+    //   );
+    // });
   }, []);
 
-  const columns: GridColDef<Server.Preorder>[] = [
+  const columns: Array<GridColDef<Server.Preorder>> = [
     {
       headerName: "ID",
       field: "id",
@@ -199,10 +214,13 @@ export function Preorders() {
   ];
 
   useEffect(() => {
-    async function filter() {
+    async function filter () {
       const results = await Preorder.search({
         regNumber,
         configurationId,
+        environmentId,
+        datacenterIds,
+        preorderTypeId,
       });
 
       setData(results.results);
@@ -210,7 +228,13 @@ export function Preorders() {
     }
 
     filter();
-  }, [regNumber, configurationId]);
+  }, [
+    regNumber,
+    configurationId,
+    environmentId,
+    datacenterIds,
+    preorderTypeId,
+  ]);
 
   return (
     <>
@@ -243,7 +267,7 @@ export function Preorders() {
 
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4, maxWidth: 700 }}>
+            <ListItemButton sx={{pl: 4, maxWidth: 700}}>
               <Box display="flex">
                 <Box flexBasis="200px" mr="2">
                   <FormControl fullWidth>
@@ -253,7 +277,7 @@ export function Preorders() {
                       label="Рег. номер:"
                       value={regNumber}
                       onChange={async (el) => {
-                        setRegNumber(el.target.value);
+                         setRegNumber(el.target.value);
                       }}
                     />
                   </FormControl>
@@ -273,7 +297,7 @@ export function Preorders() {
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      {(codesConfigurations || []).map(({ value, label }) => (
+                      {(codesConfigurations || []).map(({value, label}) => (
                         <MenuItem key={value} value={value}>
                           {label}
                         </MenuItem>
@@ -283,24 +307,20 @@ export function Preorders() {
                 </Box>
                 <Box flexBasis="200px" mr="2">
                   <FormControl fullWidth>
-                    <InputLabel id="environments">Среда:</InputLabel>
+                    <InputLabel id="configurations">Среда:</InputLabel>
                     <Select
                       className="filter__select"
                       labelId="environments"
                       label="Среда:"
+                      value={environmentId}
                       onChange={(el) => {
-                        Preorder.search({
-                          environmentId: el.target.value,
-                        }).then((results) => {
-                          setData(results.results);
-                          setCount(results.count);
-                        });
+                        setEnvironmentId(el.target.value);
                       }}
                     >
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      {(codesEnvironments || []).map(({ value, label }) => (
+                      {(codesEnvironments || []).map(({value, label}) => (
                         <MenuItem key={value} value={value}>
                           {label}
                         </MenuItem>
@@ -316,7 +336,7 @@ export function Preorders() {
                       labelId="statuses"
                       label="Статусы:"
                       onChange={(el) => {
-                        Preorder.search({ status: el }).then((results) => {
+                        Preorder.search({status: el.target.value}).then((results) => {
                           setData(results.results);
                           setCount(results.count);
                         });
@@ -325,7 +345,7 @@ export function Preorders() {
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      {(STATUSES || []).map(({ value, label }) => (
+                      {(STATUSES || []).map(({value, label}) => (
                         <MenuItem key={value} value={value}>
                           {label}
                         </MenuItem>
@@ -334,6 +354,29 @@ export function Preorders() {
                   </FormControl>
                 </Box>
                 <Box flexBasis="200px" mr="2">
+                  <FormControl fullWidth>
+                    <InputLabel id="configurations">Дата-центры:</InputLabel>
+                    <Select
+                      className="filter__select"
+                      labelId="datacenters"
+                      label="Среда:"
+                      value={datacenterIds}
+                      onChange={(el) => {
+                        setDatacenterIds(el.target.value);
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {(codesDatacenters || []).map(({value, label}) => (
+                        <MenuItem key={value} value={value}>
+                          {label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+                {/* <Box flexBasis="200px" mr="2">
                   <FormControl fullWidth>
                     <InputLabel id="environments">Дата-центры:</InputLabel>
                     <Select
@@ -352,34 +395,32 @@ export function Preorders() {
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      {(codesDatacenters || []).map(({ value, label }) => (
+                      {(codesDatacenters || []).map(({value, label}) => (
                         <MenuItem key={value} value={value}>
                           {label}
                         </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
-                </Box>
+                </Box> */}
                 <Box flexBasis="200px" mr="2">
                   <FormControl fullWidth>
-                    <InputLabel id="environments">Тип потребности:</InputLabel>
+                    <InputLabel id="configurations">
+                      Тип потребности:
+                    </InputLabel>
                     <Select
                       className="filter__select"
                       labelId="environments"
-                      label="Среда:"
+                      label="Тип потребности:"
+                      value={preorderTypeId}
                       onChange={(el) => {
-                        Preorder.search({
-                          preorderTypeId: el.target.value,
-                        }).then((results) => {
-                          setData(results.results);
-                          setCount(results.count);
-                        });
+                        setPreorderTypeId(el.target.value);
                       }}
                     >
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      {(codesPreorderTypes || []).map(({ value, label }) => (
+                      {(codesPreorderTypes || []).map(({value, label}) => (
                         <MenuItem key={value} value={value}>
                           {label}
                         </MenuItem>
@@ -399,7 +440,7 @@ export function Preorders() {
           columns={columns}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
+              paginationModel: {page: 0, pageSize: 5},
             },
           }}
           pageSizeOptions={[5, 10, 15, 20]}
